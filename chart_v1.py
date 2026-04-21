@@ -104,7 +104,7 @@ for i in range(1000):
                 
                 ax_n = axes_norm_flat[idx]
                 ax_n.clear()
-                ax_n.plot(ist_data, 1 - (np.asarray(curr_data["Low"]) / min(curr_data["Low"])) * 100, label="Price", color='#1f77b4')
+                ax_n.plot(ist_data, (np.asarray(curr_data["Low"]) / min(curr_data["Low"])) * 100 - 100.0, label="Price", color='#1f77b4')
                 ax_n.set_title(f"{t} (IST)", fontsize=16, fontweight='bold')
                 ax_n.tick_params(axis='x', rotation=45)
                 ax_n.grid(True, linestyle='--', alpha=0.7)
