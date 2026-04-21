@@ -31,7 +31,7 @@ with col2:
     unit_time = st.text_input("Unit (mo/d)", value="d")
 
 # --- Define Tabs ---
-tab_chart, tab_cnbc, tab_google = st.tabs(["Stock Charts", "CNBC News", "Google News"])
+tab_chart, tab_cnbc, tab_results, tab_announcements = st.tabs(["Stock Charts", "CNBC News", "Results", "Announcements"])
 
 # Setup for Stock Data (Dynamic Grid)
 columns = 3
@@ -51,14 +51,18 @@ with tab_cnbc:
     st.subheader("CNBC Market Feed")
     cnbc_placeholders = [st.empty() for _ in range(15)]
 
-with tab_google:
+with tab_results:
     st.subheader("Results")
     results_placeholders = {t: st.empty() for t in ticker_list}
+
+with tab_announcements:
+    st.subheader("Announcements")
+    announce_placeholders = {t: st.empty() for t in ticker_list}
 
 # --- Main Loop ---
 cnbc_url = "https://www.cnbctv18.com/commonfeeds/v1/cne/rss/market.xml"
 nse_results = "https://nsearchives.nseindia.com/content/RSS/Financial_Results.xml"
-
+announcements = "https://nsearchives.nseindia.com/content/RSS/Online_announcements.xml"
 
 for i in range(1000):
     # Update CNBC (Every 10 cycles)
@@ -70,6 +74,10 @@ for i in range(1000):
         results_feed = feedparser.parse(nse_results)
         for idx, entry in enumerate(results_feed.entries[:15]):
             results_placeholders[idx].markdown(f"**{entry.title}** \n[Read more]({entry.link})")
+
+        announcements_feed = feedparser.parse(announcements)
+        for idx, entry in enumerate(results_feed.entries[:15]):
+            announce_placeholders[idx].markdown(f"**{entry.title}** \n[Read more]({entry.link})")
 
     # Update Charts with IST
     for idx, t in enumerate(ticker_list):
