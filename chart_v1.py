@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import feedparser
 import pytz
+import seaborn as sns
+sns.set_context("poster")
 
 # --- Configuration & Inputs ---
 # 1. Hardcoded list
