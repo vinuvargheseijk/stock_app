@@ -67,7 +67,7 @@ for i in range(1000):
         for idx, entry in enumerate(cnbc_feed.entries[:15]):
             cnbc_placeholders[idx].markdown(f"**{entry.title}** \n[Read more]({entry.link})")
 
-        results_feed = feedparser(nse_results)
+        results_feed = feedparser.parse(nse_results)
         for idx, entry in enumerate(results_feed.entries[:15]):
             results_placeholders[idx].markdown(f"**{entry.title}** \n[Read more]({entry.link})")
 
