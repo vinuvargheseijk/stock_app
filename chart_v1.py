@@ -76,7 +76,7 @@ for i in range(1000):
             results_placeholders[idx].markdown(f"**{entry.title}** \n[Read more]({entry.link})")
 
         announcements_feed = feedparser.parse(announcements)
-        for idx, entry in enumerate(results_feed.entries[:15]):
+        for idx, entry in enumerate(announcements_feed.entries[:15]):
             announce_placeholders[idx].markdown(f"**{entry.title}** \n[Read more]({entry.link})")
 
     # Update Charts with IST
