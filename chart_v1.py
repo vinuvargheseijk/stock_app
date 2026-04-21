@@ -31,21 +31,25 @@ with col2:
     unit_time = st.text_input("Unit (mo/d)", value="d")
 
 # --- Define Tabs ---
-tab_chart, tab_cnbc, tab_results, tab_announcements = st.tabs(["Stock Charts", "CNBC News", "Results", "Announcements"])
+tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements"])
 
 # Setup for Stock Data (Dynamic Grid)
 columns = 3
 rows = (len(ticker_list) // columns) + (1 if len(ticker_list) % columns > 0 else 0)
 fig, axes = plt.subplots(nrows=rows, ncols=columns, figsize=(24, rows * 10))
+fig_norm, axes_norm = plt.subplots(nrows=rows, ncols=columns, figsize=(24, rows * 10))
 
 # Flatten axes only if there's more than 1 ticker, handle single ticker case
 if len(ticker_list) > 1:
     axes_flat = axes.flatten()
+    axes_norm_flat = axes_norm.flatten()
 else:
     axes_flat = [axes]
+    axes_norm_flat = [axes_norm]
 
 # Containers for dynamic updates
 chart_placeholder = tab_chart.empty()
+chart_placeholder_norm = tab_chart_norm.empty()
 
 with tab_cnbc:
     st.subheader("CNBC Market Feed")
@@ -97,6 +101,13 @@ for i in range(1000):
                 ax.set_title(f"{t} (IST)", fontsize=16, fontweight='bold')
                 ax.tick_params(axis='x', rotation=45)
                 ax.grid(True, linestyle='--', alpha=0.7)
+                
+                ax_n = axes_norm_flat[idx]
+                ax_n.clear()
+                ax_n.plot(ist_data, np.asarray(curr_data["Low"]) / min(curr_data["Low"]), label="Price", color='#1f77b4')
+                ax_n.set_title(f"{t} (IST)", fontsize=16, fontweight='bold')
+                ax_n.tick_params(axis='x', rotation=45)
+                ax_n.grid(True, linestyle='--', alpha=0.7)
         except Exception as e:
             continue
 
@@ -108,4 +119,5 @@ for i in range(1000):
     plt.tight_layout(pad=3.0)
     
     chart_placeholder.pyplot(fig)
+    chart_placeholder_norm.pyplot(fig_norm)
     time.sleep(2)
