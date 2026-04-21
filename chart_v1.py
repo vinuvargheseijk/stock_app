@@ -116,6 +116,7 @@ for i in range(1000):
         axes_flat[j].axis('off')
 
     fig.subplots_adjust(hspace=0.95, wspace=0.4)
+    fig_norm.subplots_adjust(hspace=0.95, wspace=0.4)
     plt.tight_layout(pad=3.0)
     
     chart_placeholder.pyplot(fig)
