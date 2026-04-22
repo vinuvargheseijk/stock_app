@@ -8,6 +8,8 @@ from datetime import datetime
 import feedparser
 import pytz
 import seaborn as sns
+import matplotlib
+matplotlib.use("Agg")
 sns.set_context("poster")
 
 # --- Configuration & Inputs ---
