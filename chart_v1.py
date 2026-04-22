@@ -92,7 +92,7 @@ for i in range(1000):
                 
                 ax = axes_flat[idx]
                 ax.clear()
-                
+                ax.set_title(t)
                 mpf.plot(curr_data, type = 'renko', ax = ax)
                 sma = curr_data["Low"].mean()
                 ax.axhline(y=float(sma), color = "g", linestyle = "-.")
