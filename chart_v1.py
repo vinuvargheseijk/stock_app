@@ -9,6 +9,8 @@ import feedparser
 import pytz
 import seaborn as sns
 import matplotlib
+import mplfinance as mpf
+
 matplotlib.use("Agg")
 sns.set_context("poster")
 
@@ -90,10 +92,8 @@ for i in range(1000):
                 
                 ax = axes_flat[idx]
                 ax.clear()
-                ax.plot(ist_data, curr_data["Low"], label="Price", color='#1f77b4')
-                ax.set_title(f"{t} (IST)", fontsize=16, fontweight='bold')
-                ax.tick_params(axis='x', rotation=45)
-                ax.grid(True, linestyle='--', alpha=0.7)
+                
+                mpf.plot(curr_data, type = 'renko', ax = ax)
                 sma = curr_data["Low"].mean()
                 ax.axhline(y=float(sma), color = "g", linestyle = "-.")
                 ax_n = axes_norm_flat[idx]
@@ -101,6 +101,7 @@ for i in range(1000):
                 ax_n.plot(ist_data, (np.asarray(curr_data["Low"]) / curr_data.iloc[0]["Low"]) * 100 - 100.0, label="Price", color='#1f77b4')
                 ax_n.set_title(f"{t} (IST)", fontsize=16, fontweight='bold')
                 ax_n.tick_params(axis='x', rotation=45)
+                ax_n.axhline( (sma / (float(curr_data.iloc[0]["Low"]))) * 100 - 100, color = "g", linestyle = "-.")
                 ax_n.grid(True, linestyle='--', alpha=0.7)
         except Exception as e:
             continue
