@@ -64,9 +64,6 @@ with tab_announcements:
     announce_placeholders = {t: st.empty() for t in ticker_list}
 
 
-def calc_sma(data):
-    return np.sum(list(data))/len(list(data))
-
 
 # --- Main Loop ---
 cnbc_url = "https://www.cnbctv18.com/commonfeeds/v1/cne/rss/market.xml"
@@ -95,8 +92,8 @@ for i in range(1000):
                 ax.set_title(f"{t} (IST)", fontsize=16, fontweight='bold')
                 ax.tick_params(axis='x', rotation=45)
                 ax.grid(True, linestyle='--', alpha=0.7)
-                sma = calc_sma(curr_data["Low"])
-                ax.plot(ist_data, [sma] * len(ist_data), "r")
+                sma = curr_data["Low"].mean()
+                ax.axhline(y=float(sma), color = "g", linestyle = "-.")
                 ax_n = axes_norm_flat[idx]
                 ax_n.clear()
                 ax_n.plot(ist_data, (np.asarray(curr_data["Low"]) / curr_data.iloc[0]["Low"]) * 100 - 100.0, label="Price", color='#1f77b4')
