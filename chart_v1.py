@@ -65,7 +65,8 @@ with tab_announcements:
 
 
 def cal_sma(data):
-    sma = np.sum(data) / len(data)
+    sma = np.sum(list(data)) / len(data)
+    print(sma)
     return sma
 
 # --- Main Loop ---
@@ -108,7 +109,7 @@ for i in range(1000):
                 ax.grid(True, linestyle='--', alpha=0.7)
                 sma = calc_sma(curr_data["Low"])
                 ax.plot(ist_data, [sma] * len(ist_data), "g")
-                
+                print(ist_data)  
                 ax_n = axes_norm_flat[idx]
                 ax_n.clear()
                 ax_n.plot(ist_data, (np.asarray(curr_data["Low"]) / curr_data.iloc[0]["Low"]) * 100 - 100.0, label="Price", color='#1f77b4')
