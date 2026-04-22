@@ -113,4 +113,6 @@ for i in range(1000):
     
     chart_placeholder.pyplot(fig)
     chart_placeholder_norm.pyplot(fig_norm)
+    plt.close(fig)
+    plt.close(fig_norm)
     time.sleep(2)
