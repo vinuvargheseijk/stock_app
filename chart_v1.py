@@ -107,7 +107,7 @@ for i in range(1000):
                 ax.tick_params(axis='x', rotation=45)
                 ax.grid(True, linestyle='--', alpha=0.7)
                 sma = calc_sma(curr_data["Low"])
-                ax.plot(ist_data, sma, "g")
+                ax.plot(ist_data, [sma] * len(ist_data), "g")
                 
                 ax_n = axes_norm_flat[idx]
                 ax_n.clear()
