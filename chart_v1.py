@@ -63,6 +63,11 @@ with tab_announcements:
     st.subheader("Announcements")
     announce_placeholders = {t: st.empty() for t in ticker_list}
 
+
+def cal_sma(data):
+    sma = np.sum(data) / len(data)
+    return sma
+
 # --- Main Loop ---
 cnbc_url = "https://www.cnbctv18.com/commonfeeds/v1/cne/rss/market.xml"
 nse_results = "https://nsearchives.nseindia.com/content/RSS/Financial_Results.xml"
@@ -101,6 +106,8 @@ for i in range(1000):
                 ax.set_title(f"{t} (IST)", fontsize=16, fontweight='bold')
                 ax.tick_params(axis='x', rotation=45)
                 ax.grid(True, linestyle='--', alpha=0.7)
+                sma = calc_sma(curr_data["Low"])
+                ax.plot(ist_data, sma, "g")
                 
                 ax_n = axes_norm_flat[idx]
                 ax_n.clear()
