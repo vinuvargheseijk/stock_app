@@ -6,3 +6,4 @@ matplotlib
 feedparser
 pytz
 seaborn
+mplfinance
