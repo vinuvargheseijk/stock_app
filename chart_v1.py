@@ -18,16 +18,17 @@ sns.set_context("poster")
 # 1. Hardcoded list
 hardcoded_tickers = ["KERNEX", "SUZLON", "TMCV", "ZYDUSLIFE", "JINDALSAW", "ASTERDM", "BEL", "BHARATFORG", "CYIENT", "HBLENGINE", "LUPIN", "MARICO", "WELCORP", "DRREDDY", "APOLLO", "ASTRAMICRO", "JBMA", "MAZDOCK", "MCX", "NCC", "SHYAMMETL", "PARAS", "ONESOURCE"]
 
+
 # 2. Multiselect for known tickers
 selected_fixed = st.multiselect("Pick from list:", hardcoded_tickers)
 
 # 3. Text input for custom tickers (User can type "RELIANCE, TATASTEEL")
 custom_input = st.text_input("Add custom tickers (comma separated):", "")
 custom_tickers = [x.strip().upper() for x in custom_input.split(",") if x.strip()]
-
 # Combine all unique tickers
 ticker_list = list(dict.fromkeys(["SUZLON", "BHARATFORG"] + selected_fixed + custom_tickers))
 
+plot_type = st.text_input("Enter plot type (renko, line, candle, pnf):", key = "plotType")
 col1, col2 = st.columns(2)
 with col1:
     number = st.number_input("History duration", value=1) 
@@ -93,7 +94,7 @@ for i in range(1000):
                 ax = axes_flat[idx]
                 ax.clear()
                 ax.set_title(t)
-                mpf.plot(curr_data, type = 'renko', ax = ax)
+                mpf.plot(curr_data, type = plot_type, ax = ax, style = "binance")
                 sma = curr_data["Low"].mean()
                 ax.axhline(y=float(sma), color = "g", linestyle = "-.")
                 ax_n = axes_norm_flat[idx]
