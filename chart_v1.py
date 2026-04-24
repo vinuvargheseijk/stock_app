@@ -74,7 +74,7 @@ for i in range(1000):
         ax_bar.set_ylabel("Total Investment (INR)")
         ax_bar.set_xlabel("Sector")
         plt.xticks(rotation=45, ha='right')
-        plt.tight_layout()
+        #plt.tight_layout()
 
         # Display the bar chart in the dedicated tab placeholder
         port_placeholder.pyplot(fig_bar)
