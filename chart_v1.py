@@ -100,7 +100,7 @@ for i in range(1000):
             st.dataframe(df_pf, use_container_width=True)
 
         # Display the bar chart in the dedicated tab placeholder
-        port_placeholder.pyplot(fig_bar)
+        #port_placeholder.pyplot(fig_bar)
     except FileNotFoundError:
         port_placeholder.error("pf.csv not found in the current directory.")
     except Exception as e:
