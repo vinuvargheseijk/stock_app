@@ -36,7 +36,7 @@ with col2:
     unit_time = st.text_input("Unit (mo/d)", value="d")
 
 # --- Define Tabs ---
-tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements"])
+tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements, tab_pf = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements", "Portfolio"])
 
 # Setup for Stock Data (Dynamic Grid)
 columns = 3
@@ -55,6 +55,7 @@ else:
 # Containers for dynamic updates
 chart_placeholder = tab_chart.empty()
 chart_placeholder_norm = tab_chart_norm.empty()
+port_placeholder = tab_pf.empty()
 
 with tab_cnbc:
     st.subheader("CNBC Market Feed")
@@ -75,6 +76,29 @@ cnbc_url = "https://www.cnbctv18.com/commonfeeds/v1/cne/rss/market.xml"
 
 for i in range(1000):
     # Update CNBC (Every 10 cycles)
+    try:
+        df_pf = pd.read_csv("./pf.csv")
+        # Calculate Total Cost logic from get_distribution.py
+        df_pf["Total Cost"] = df_pf["Quantity"] * df_pf["Average Cost Price"]
+
+        # Group and sort for clarity
+        sector_dist = df_pf.groupby('Sector Name')['Total Cost'].sum().sort_values(ascending=False)
+
+        fig_bar, ax_bar = plt.subplots(figsize=(12, 6))
+        sector_dist.plot(kind='bar', ax=ax_bar, color='#1f77b4')
+        ax_bar.set_title("Portfolio Distribution by Sector", fontsize=14, fontweight='bold')
+        ax_bar.set_ylabel("Total Investment (INR)")
+        ax_bar.set_xlabel("Sector")
+        plt.xticks(rotation=45, ha='right')
+        #plt.tight_layout()
+
+        # Display the bar chart in the dedicated tab placeholder
+        port_placeholder.pyplot(fig_bar)
+    except FileNotFoundError:
+        port_placeholder.error("pf.csv not found in the current directory.")
+    except Exception as e:
+        port_placeholder.error(f"Error loading portfolio data: {e}")
+
     if i % 10 == 0:
         cnbc_feed = feedparser.parse(cnbc_url)
         for idx, entry in enumerate(cnbc_feed.entries[:15]):
