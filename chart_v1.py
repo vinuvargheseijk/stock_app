@@ -91,6 +91,13 @@ for i in range(1000):
         ax_bar.set_xlabel("Sector")
         plt.xticks(rotation=45, ha='right')
         #plt.tight_layout()
+        with port_placeholder.container():
+            st.pyplot(fig_bar)
+            plt.close(fig_bar) # Close to free up memory
+            
+            st.subheader("Raw Portfolio Data")
+            # Displaying the dataframe from pf.csv
+            st.dataframe(df_pf, use_container_width=True)
 
         # Display the bar chart in the dedicated tab placeholder
         port_placeholder.pyplot(fig_bar)
