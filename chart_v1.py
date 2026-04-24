@@ -44,6 +44,7 @@ else:
 
 # Containers for dynamic updates
 chart_placeholder = tab_chart.empty()
+port_placeholder = tab_pf.empty() # Placeholder for the bar chart
 
 with tab_cnbc:
     st.subheader("CNBC Market Feed")
@@ -53,46 +54,35 @@ with tab_google:
     st.subheader("Ticker Specific News")
     google_placeholders = {t: st.empty() for t in ticker_list}
 
-with tab_pf:
-    st.subheader("Portfolio Distribution")
-    try:
-        # Load data from pf.csv
-        df_pf = pd.read_csv("./pf.csv")
-        
-        # Calculate Total Cost
-        df_pf["Total Cost"] = df_pf["Quantity"] * df_pf["Average Cost Price"]
-        
-        # Aggregate by Sector
-        sector_dist = df_pf.groupby('Sector Name')['Total Cost'].sum()
-        
-        # Create the Pie Chart
-        fig_pie, ax_pie = plt.subplots(figsize=(10, 8))
-        sector_dist.plot(
-            kind='pie', 
-            y='Total Cost', 
-            autopct='%1.1f%%', 
-            rotatelabels=True, 
-            legend=False, 
-            ax=ax_pie,
-            startangle=140
-        )
-        ax_pie.set_ylabel('') # Remove the 'Total Cost' label from the y-axis
-        plt.tight_layout()
-        
-        # Display in Streamlit
-        st.pyplot(fig_pie)
-        
-    except FileNotFoundError:
-        st.error("pf.csv not found. Please ensure the file is in the correct directory.")
-    except Exception as e:
-        st.error(f"Error loading portfolio: {e}")
-
 
 # --- Main Loop ---
 cnbc_url = "https://www.cnbctv18.com/commonfeeds/v1/cne/rss/market.xml"
 
 for i in range(1000):
     # Update CNBC (Every 10 cycles)
+    try:
+        df_pf = pd.read_csv("./pf.csv")
+        # Calculate Total Cost logic from get_distribution.py
+        df_pf["Total Cost"] = df_pf["Quantity"] * df_pf["Average Cost Price"]
+
+        # Group and sort for clarity
+        sector_dist = df_pf.groupby('Sector Name')['Total Cost'].sum().sort_values(ascending=False)
+
+        fig_bar, ax_bar = plt.subplots(figsize=(12, 6))
+        sector_dist.plot(kind='bar', ax=ax_bar, color='#1f77b4')
+        ax_bar.set_title("Portfolio Distribution by Sector", fontsize=14, fontweight='bold')
+        ax_bar.set_ylabel("Total Investment (INR)")
+        ax_bar.set_xlabel("Sector")
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+
+        # Display the bar chart in the dedicated tab placeholder
+        port_placeholder.pyplot(fig_bar)
+    except FileNotFoundError:
+        port_placeholder.error("pf.csv not found in the current directory.")
+    except Exception as e:
+        port_placeholder.error(f"Error loading portfolio data: {e}")
+
     if i % 10 == 0:
         cnbc_feed = feedparser.parse(cnbc_url)
         for idx, entry in enumerate(cnbc_feed.entries[:15]):
