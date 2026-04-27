@@ -34,10 +34,11 @@ ticker_list = list(dict.fromkeys(["SUZLON", "BHARATFORG"] + selected_fixed + cus
 plot_type = st.text_input("Enter plot type (renko, line, candle, pnf):", key = "plotType")
 col1, col2 = st.columns(2)
 with col1:
-    number = st.number_input("History duration", value=1) 
+    number = st.number_input("History duration", value=3) 
 with col2:
     unit_time = st.text_input("Unit (mo/d)", value="d")
-
+print("NUMBER: ", number, type(number))
+print("Unit: ", unit_time)
 # --- Define Tabs ---
 tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements, tab_pf, tab_opt = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements", "Portfolio", "Optimizer"])
 
@@ -121,8 +122,9 @@ with tab_opt:
       st.button("Optimizer data", on_click = set_opt_clicked)
       if st.session_state.opt_clicked == True:
         st.subheader("PF optimization")
-        df_opt = simulator.run_sim(df_pf, number, unit_time)
+        df_opt, allocation = simulator.run_sim(df_pf, number, unit_time)
         st.dataframe(df_opt, width='stretch')
+        st.write("Allocation: " + str(allocation))
     
 
 
