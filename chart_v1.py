@@ -10,6 +10,9 @@ import pytz
 import seaborn as sns
 import matplotlib
 import mplfinance as mpf
+import subprocess
+import sys
+import simulator
 
 matplotlib.use("Agg")
 sns.set_context("poster")
@@ -36,7 +39,7 @@ with col2:
     unit_time = st.text_input("Unit (mo/d)", value="d")
 
 # --- Define Tabs ---
-tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements, tab_pf = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements", "Portfolio"])
+tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements, tab_pf, tab_opt = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements", "Portfolio", "Optimizer"])
 
 # Setup for Stock Data (Dynamic Grid)
 columns = 3
@@ -71,6 +74,7 @@ with tab_announcements:
 
 
 
+
 cnbc_url = "https://www.cnbctv18.com/commonfeeds/v1/cne/rss/market.xml"
 with tab_pf:
    if 'clicked' not in st.session_state:
@@ -102,12 +106,23 @@ with tab_pf:
             plt.close(fig_bar) # Close to free up memory
             st.subheader("Raw Portfolio Data")
             # Displaying the dataframe from pf.csv
-            st.dataframe(df_pf, use_container_width=True)
+            st.dataframe(df_pf, width='stretch')
    except FileNotFoundError:
         port_placeholder.error("pf.csv not found in the current directory.")
    except Exception as e:
         port_placeholder.error(f"Error loading portfolio data: {e}")
             
+with tab_opt:
+      if 'opt_clicked' not in st.session_state:
+          st.session_state.opt_clicked = False
+      def set_opt_clicked():
+          st.session_state.opt_clicked = True
+
+      st.button("Optimizer data", on_click = set_opt_clicked)
+      if st.session_state.opt_clicked == True:
+        st.subheader("PF optimization")
+        df_opt = simulator.run_sim(df_pf)
+        st.dataframe(df_opt, width='stretch')
     
 
 
