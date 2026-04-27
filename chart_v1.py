@@ -71,13 +71,19 @@ with tab_announcements:
 
 
 
-# --- Main Loop ---
 cnbc_url = "https://www.cnbctv18.com/commonfeeds/v1/cne/rss/market.xml"
+with tab_pf:
+   if 'clicked' not in st.session_state:
+       st.session_state.clicked = False
 
-for i in range(1000):
-    # Update CNBC (Every 10 cycles)
-    try:
-        df_pf = pd.read_csv("./pf.csv")
+   def set_clicked():
+       st.session_state.clicked = True
+
+   st.button("Upload Portfolio", on_click = set_clicked)
+   if st.session_state.clicked:
+      pf_file = st.file_uploader("Choose a file")
+   try:
+        df_pf = pd.read_csv(pf_file)
         # Calculate Total Cost logic from get_distribution.py
         df_pf["Total Cost"] = df_pf["Quantity"] * df_pf["Average Cost Price"]
 
@@ -94,17 +100,22 @@ for i in range(1000):
         with port_placeholder.container():
             st.pyplot(fig_bar)
             plt.close(fig_bar) # Close to free up memory
-            
             st.subheader("Raw Portfolio Data")
             # Displaying the dataframe from pf.csv
             st.dataframe(df_pf, use_container_width=True)
+   except FileNotFoundError:
+        port_placeholder.error("pf.csv not found in the current directory.")
+   except Exception as e:
+        port_placeholder.error(f"Error loading portfolio data: {e}")
+            
+    
+
+
+for i in range(1000):
+    # Update CNBC (Every 10 cycles)
 
         # Display the bar chart in the dedicated tab placeholder
         #port_placeholder.pyplot(fig_bar)
-    except FileNotFoundError:
-        port_placeholder.error("pf.csv not found in the current directory.")
-    except Exception as e:
-        port_placeholder.error(f"Error loading portfolio data: {e}")
 
     if i % 10 == 0:
         cnbc_feed = feedparser.parse(cnbc_url)
