@@ -60,10 +60,8 @@ def problem_config(df, duration, unit):
     res = minimize(objective, x0, args = (mean_values, cov, in_days), method='trust-constr', bounds = bounds, constraints=[linear_constraint])
     return res
 
-def run_sim(df):
+def run_sim(df, duration, duration_unit):
   history_df = pd.DataFrame()  
-  duration = 1
-  duration_unit = "mo"
   ticker_list = []
   for isin in df["ISIN"]:
       print(isin)

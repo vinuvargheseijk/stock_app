@@ -121,7 +121,7 @@ with tab_opt:
       st.button("Optimizer data", on_click = set_opt_clicked)
       if st.session_state.opt_clicked == True:
         st.subheader("PF optimization")
-        df_opt = simulator.run_sim(df_pf)
+        df_opt = simulator.run_sim(df_pf, number, unit_time)
         st.dataframe(df_opt, width='stretch')
     
 
