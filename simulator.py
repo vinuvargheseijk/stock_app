@@ -54,9 +54,9 @@ def problem_config(df, duration, unit):
     linear_constraint = LinearConstraint([var_const], [0], [1])
     bounds = Bounds([0] * num_pf, [1] * num_pf)
     if unit == "mo":
-        in_days = duration * 60
+        in_days = int(duration) * 60
     else:
-        in_days = duration
+        in_days = int(duration)
     res = minimize(objective, x0, args = (mean_values, cov, in_days), method='trust-constr', bounds = bounds, constraints=[linear_constraint])
     return res
 
