@@ -118,13 +118,15 @@ with tab_opt:
           st.session_state.opt_clicked = False
       def set_opt_clicked():
           st.session_state.opt_clicked = True
+      amount_invest = st.number_input("Planned investment value in INR", value=100000) 
 
       st.button("Optimizer data", on_click = set_opt_clicked)
       if st.session_state.opt_clicked == True:
         st.subheader("PF optimization")
-        df_opt, allocation = simulator.run_sim(df_pf, number, unit_time)
+        df_opt, allocation = simulator.run_sim(df_pf, amount_invest)
         st.dataframe(df_opt, width='stretch')
         st.write("Allocation: " + str(allocation))
+      st.write("Note: This calculation is based on 200 days data")  
     
 
 

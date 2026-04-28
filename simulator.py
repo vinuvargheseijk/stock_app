@@ -52,11 +52,13 @@ def problem_config(df, num_pf):
     res = minimize(objective, x0, args = (cov, individual_vol), method='trust-constr', bounds = bounds, constraints=[linear_constraint])
     return res
 
-def run_sim(df, duration, duration_unit):
+def run_sim(df, amount):
   history_df = pd.DataFrame()  
   ticker_list = []
   gains = []
   smas = []
+  duration = 200
+  duration_unit = "d"
   for isin in df["ISIN"]:
       ticker_symbol = get_ticker_from_isin(isin)
       stock = yf.Ticker(ticker_symbol)
@@ -70,6 +72,7 @@ def run_sim(df, duration, duration_unit):
   df["Scrip"] = ticker_list
   df["gain"] = gains
   df["sma"] = smas
+  df["Amount"] = np.asarray(res.x) * amount
   return df, sum(res.x)
 
 
