@@ -37,24 +37,16 @@ with col1:
     number = st.number_input("History duration", value=3) 
 with col2:
     unit_time = st.text_input("Unit (mo/d)", value="d")
+
+display_interval = 5
+display_interval_unit = "m"
+
 if unit_time == "mo":
-    if number > 1:
-        display_interval = 1
-        display_interval_unit = "d"
-    else:
-        display_interval = number
-        display_interval_unit = unit_time
+    display_interval = 1
+    display_interval_unit = "d"
     
-if unit_time == "d":
-    if number > 5:
-        display_interval = 1
-        display_interval_unit = "d"
-    else:   
-        display_interval = number
-        display_interval_unit = unit_time
-        
-print("NUMBER: ", number, type(number))
-print("Unit: ", unit_time)
+print("NUMBER: ", display_interval, type(display_interval))
+print("Unit: ", display_interval_unit, type(display_interval_unit))
 # --- Define Tabs ---
 tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements, tab_pf, tab_opt = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements", "Portfolio", "Optimizer"])
 
@@ -160,7 +152,7 @@ for i in range(1000):
     for idx, t in enumerate(ticker_list):
         try:
             ticker = yf.Ticker(t + ".NS")
-            curr_data = ticker.history(period=f"{display_interval}{display_interval_unit}", interval="5m")
+            curr_data = ticker.history(period=f"{number}{unit_time}", interval=f"{display_interval}{display_interval_unit}")
             
             if not curr_data.empty:
                 # Localize to IST
