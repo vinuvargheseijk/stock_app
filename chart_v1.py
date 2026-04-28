@@ -37,6 +37,22 @@ with col1:
     number = st.number_input("History duration", value=3) 
 with col2:
     unit_time = st.text_input("Unit (mo/d)", value="d")
+if unit_time == "mo":
+    if number > 1:
+        display_interval = 1
+        display_interval_unit = "d"
+    else:
+        display_interval = number
+        display_interval_unit = unit_time
+    
+if unit_time == "d":
+    if number > 5:
+        display_interval = 1
+        display_interval_unit = "d"
+    else:   
+        display_interval = number
+        display_interval_unit = unit_time
+        
 print("NUMBER: ", number, type(number))
 print("Unit: ", unit_time)
 # --- Define Tabs ---
@@ -144,7 +160,7 @@ for i in range(1000):
     for idx, t in enumerate(ticker_list):
         try:
             ticker = yf.Ticker(t + ".NS")
-            curr_data = ticker.history(period=f"{number}{unit_time}", interval="5m")
+            curr_data = ticker.history(period=f"{display_interval}{display_interval_unit}", interval="5m")
             
             if not curr_data.empty:
                 # Localize to IST
