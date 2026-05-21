@@ -51,7 +51,7 @@ print("Unit: ", display_interval_unit, type(display_interval_unit))
 tab_chart, tab_chart_norm, tab_cnbc, tab_results, tab_announcements, tab_pf, tab_opt = st.tabs(["Stock Charts", "Chart Normalized",  "CNBC News", "Results", "Announcements", "Portfolio", "Optimizer"])
 
 # Setup for Stock Data (Dynamic Grid)
-columns = 3
+columns = 5
 rows = (len(ticker_list) // columns) + (1 if len(ticker_list) % columns > 0 else 0)
 fig, axes = plt.subplots(nrows=rows, ncols=columns, figsize=(24, rows * 10))
 fig_norm, axes_norm = plt.subplots(nrows=rows, ncols=columns, figsize=(24, rows * 10))
